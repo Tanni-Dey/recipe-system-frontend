@@ -1,6 +1,7 @@
-import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../utils/firebase.init";
+import Swal from "sweetalert2/dist/sweetalert2.js";
 import CustomInput from "../components/CustomInput";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const AddRecipe = () => {
   const [user] = useAuthState(auth);
@@ -42,7 +43,7 @@ const AddRecipe = () => {
 
           console.log(recipe);
 
-          fetch("http://localhost:5000/recipes", {
+          fetch("https://recipe-system-backend.onrender.com/recipes", {
             method: "POST",
             headers: {
               "content-type": "application/json",
@@ -52,10 +53,19 @@ const AddRecipe = () => {
             .then((res) => res.json())
             .then((addRecipe) => {
               if (addRecipe.recipe?.insertedId) {
-                alert("Recipe Added");
+                Swal.fire({
+                  icon: "success",
+                  title: "Recipe Added",
+                  text: "You can see the recipe in recipes page.",
+                });
               } else {
-                alert("Recipe not Added. Already have this recipe");
+                Swal.fire({
+                  icon: "error",
+                  title: "Recipe not Added",
+                  text: "Please try again",
+                });
               }
+              e.target.reset();
               console.log("addRecipe", addRecipe);
             });
         }

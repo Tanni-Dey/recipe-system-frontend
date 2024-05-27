@@ -1,15 +1,20 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import auth from "../../utils/firebase.init";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import useSingleUser from "../../hooks/useSingleUser";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const Recipe = ({ recipe }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user] = useAuthState(auth);
   const [singleUser] = useSingleUser(user);
+  const purchasedByUser = recipe.purchasedBy.find(
+    (userEmail) => userEmail === user?.email
+  );
 
+  //view recipe button function
   const handleViewRecipe = () => {
     if (!user) {
       //   navigate("/recipes");
@@ -18,26 +23,50 @@ const Recipe = ({ recipe }) => {
         title: "Alert!",
         text: "You need to be logged in to access this page.",
       });
+      return <Navigate to="/recipes" state={{ from: location }} replace />;
     } else if (user) {
+      console.log(singleUser);
       if (user.email === recipe.creatorEmail) {
         navigate(`/recipe/${recipe._id}`);
       } else {
         if (singleUser.coin > 10) {
           Swal.fire({
-            title: "Spend your 10 coins for purchsed recipe",
-            // showDenyButton: true,
+            title: "Would you want purchase the recipe ?",
+            text: "You have enough coin. Spend your 10 coins for purchase the recipe",
             showCancelButton: true,
-            confirmButtonText: "Ok",
-            // denyButtonText: `Don't save`
+            confirmButtonText: "Yes",
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              const sendData = {
+                recipeCreator: recipe.creatorEmail,
+                recipeId: recipe._id,
+                recipeBuyer: user.email,
+              };
+              fetch(
+                "https://recipe-system-backend.onrender.com/recipe-details",
+                {
+                  method: "PUT",
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                  body: JSON.stringify(sendData),
+                }
+              )
+                .then((res) => res.json())
+                .then((data) => {
+                  if (data.status === "success") {
+                    Swal.fire({
+                      icon: "success",
+                      title: "Purchase Done",
+                    });
+                    navigate(`/recipe/${recipe._id}`);
+                  }
+                });
+            }
           });
-          // .then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          // if (result.isConfirmed) {
-          //   Swal.fire("Saved!", "", "success");
-          // } else if (result.isDenied) {
-          //   Swal.fire("Changes are not saved", "", "info");
-          // }
-          // });
+        } else if (singleUser.coin < 10) {
+          navigate("/purchase-coin");
         }
       }
     }
@@ -61,11 +90,19 @@ const Recipe = ({ recipe }) => {
         <p>Purchaed By : {recipe.purchasedBy[0] || ""}</p>
         <p>Recipe Creator : {recipe.creatorEmail}</p>
         <div className="card-actions justify-end">
-          {/* <Link to={`/recipe/${recipe._id}`}> */}
-          <button className="btn btn-primary" onClick={handleViewRecipe}>
-            View The Recipe
-          </button>
-          {/* </Link> */}
+          {purchasedByUser ? (
+            <button
+              disabled
+              className="btn btn-primary"
+              onClick={handleViewRecipe}
+            >
+              View The Recipe
+            </button>
+          ) : (
+            <button className="btn btn-primary" onClick={handleViewRecipe}>
+              View The Recipe
+            </button>
+          )}
         </div>
       </div>
     </div>

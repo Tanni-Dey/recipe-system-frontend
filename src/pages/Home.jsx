@@ -26,7 +26,7 @@ const Home = () => {
       if (matchFrom) {
         const recipeId = matchFrom[1];
         console.log("recipe id", recipeId);
-        fetch(`http://localhost:5000/recipe/${recipeId}`)
+        fetch(`https://recipe-system-backend.onrender.com/recipe/${recipeId}`)
           .then((res) => res.json())
           .then((data) => {
             setRecipe(data.recipe);
@@ -59,7 +59,7 @@ const Home = () => {
   // }
   // useEffect(() => {
   //   if (user) {
-  //     fetch(`http://localhost:5000/user?email=${user.email}`)
+  //     fetch(`https://recipe-system-backend.onrender.com/user?email=${user.email}`)
   //       .then((res) => res.json())
   //       .then((data) => {
   //         if (data.user.email && data.user.coin > 10) {

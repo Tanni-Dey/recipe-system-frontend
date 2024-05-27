@@ -1,14 +1,31 @@
 import { useEffect, useState } from "react";
 import Recipe from "../components/RecipesComponent/Recipe";
+import Loading from "../components/Loading";
+import { useAuthState } from "react-firebase-hooks/auth";
+import auth from "../utils/firebase.init";
+import { useNavigate } from "react-router-dom";
 
 const Recipes = () => {
   const [allRecipe, setAllRecipe] = useState([]);
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname;
+  const [user] = useAuthState(auth);
 
   useEffect(() => {
-    fetch("http://localhost:5000/recipes")
+    fetch("https://recipe-system-backend.onrender.com/recipes")
       .then((res) => res.json())
       .then((data) => setAllRecipe(data));
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, []);
+
+  if (allRecipe.length === 0) {
+    return <Loading />;
+  }
 
   return (
     <div className="container mx-auto my-20">
@@ -20,24 +37,3 @@ const Recipes = () => {
 };
 
 export default Recipes;
-{
-  /* <div
-          key={recipe._id}
-          className="card card-side bg-base-100  mb-5 shadow-xl"
-        >
-          <figure>
-            <img
-              className="w-[30%] mr-auto"
-              src={recipe.recipeImg}
-              alt="recipe_img"
-            />
-          </figure>
-          <div className="card-body">
-            <h2 className="card-title">New movie is released!</h2>
-            <p>Click the button to watch on Jetflix app.</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Watch</button>
-            </div>
-          </div>
-        </div> */
-}

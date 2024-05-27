@@ -27,7 +27,7 @@ const Header = () => {
       };
 
       //user data send to backend
-      fetch("http://localhost:5000/users", {
+      fetch("https://recipe-system-backend.onrender.com/users", {
         method: "POST",
         headers: {
           "content-type": "application/json",
