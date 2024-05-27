@@ -1,6 +1,7 @@
+import Header from "./components/Shared/Header";
+import Footer from "./components/Shared/Footer";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import "sweetalert2/src/sweetalert2.scss";
 
 function App() {
   return (

@@ -1,18 +1,9 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../utils/firebase.init";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import CustomInput from "../components/CustomInput";
 
 const AddRecipe = () => {
   const [user] = useAuthState(auth);
-  const location = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      location("/");
-    }
-  }, []);
 
   // form submit function
   const handleSubmit = (e) => {

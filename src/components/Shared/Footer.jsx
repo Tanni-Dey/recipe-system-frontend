@@ -33,7 +33,7 @@ const Footer = () => {
         </div>
       </nav>
       <aside>
-        <p>Copyright © 2024 - All right reserved by Recipe System</p>
+        <p>Copyright © 2024 - All right reserved by Flavor Verse</p>
       </aside>
     </footer>
   );

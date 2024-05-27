@@ -1,10 +1,12 @@
 import App from "../App";
 import Home from "../pages/Home";
 import Recipes from "../pages/Recipes";
-import AddRecipe from "../pages/AddRecipe";
-import { createBrowserRouter } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "../pages/NotFound";
+import AddRecipe from "../pages/AddRecipe";
+import ProtectedRoute from "./ProtectedRoute";
+import RecipeDetails from "../pages/RecipeDetails";
+import { createBrowserRouter } from "react-router-dom";
+import PurchaseCoin from "../pages/PurchaseCoin";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,22 @@ const router = createBrowserRouter([
           <ProtectedRoute>
             <AddRecipe />
           </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/recipe/:id",
+        element: (
+          <ProtectedRoute>
+            <RecipeDetails />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/purchase-coin",
+        element: (
+          // <ProtectedRoute>
+          <PurchaseCoin />
+          // </ProtectedRoute>
         ),
       },
     ],

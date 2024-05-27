@@ -27,15 +27,14 @@ const DevInfo = () => {
   ];
 
   return (
-    <div className="text-center mb-20">
-      <h3 className="text-3xl font-bold text-secondary mb-5">
+    <div className="container mx-auto mb-20">
+      <h3 className="text-3xl font-semibold text-secondary mb-5 text-center">
         Who Developed the System
       </h3>
-
-      <div className="carousel carousel-center max-w-md p-4 space-x-4 bg-neutral rounded-box">
+      <div className="grid grid-cols-2 gap-5 p-4  bg-neutral rounded-box">
         {infoCards.map((item) => (
           <div key={item.id} className="carousel-item">
-            <div className="card max-w-80 bg-white border text-primary-content shadow-lg">
+            <div className="card  bg-white border text-primary-content shadow-lg">
               <div className="card-body items-center ">
                 <h2 className="card-title capitalize font-semibold mb-3">
                   {item.title}

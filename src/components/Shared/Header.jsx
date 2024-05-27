@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import googleLogo from "../assets/Google_logo.png";
+import googleLogo from "../../assets/Google_logo.png";
 import {
   useAuthState,
   useSignInWithGoogle,
   useSignOut,
 } from "react-firebase-hooks/auth";
-import auth from "../utils/firebase.init";
+import auth from "../../utils/firebase.init";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 
 const Header = () => {
